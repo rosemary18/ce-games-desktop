@@ -14,15 +14,17 @@ class LuckyDrawHeader extends StatefulWidget {
 
   final WindowController? windowSpin;
   final Function() handlerOpenWindowSpin;
-  final WindowSpinThemeModel? windowSpinTheme;
-  final Function(WindowSpinThemeModel?)? handlerSaveWindowSpinTheme;
+  final WindowSpinSettingsModel? windowSpinSetting;
+  final Function(WindowSpinSettingsModel?)? handlerSaveWindowSpinSetting;
+  final bool isSpinning;
 
   const LuckyDrawHeader({
     super.key,
     this.windowSpin,
     required this.handlerOpenWindowSpin,
-    this.windowSpinTheme,
-    this.handlerSaveWindowSpinTheme
+    this.windowSpinSetting,
+    this.handlerSaveWindowSpinSetting,
+    required this.isSpinning
   });
 
   @override
@@ -33,7 +35,7 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
 
   final storage = const FlutterSecureStorage();
   LuckyDrawGameModel? last_game;
-  WindowSpinThemeModel? windowSpinTheme;
+  WindowSpinSettingsModel? windowSpinSetting;
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
           last_game = LuckyDrawGameModel.fromJson(jsonDecode(value));
         }
       });
-      windowSpinTheme = widget.windowSpinTheme;
+      windowSpinSetting = widget.windowSpinSetting;
     });
   }
 
@@ -58,7 +60,7 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
           last_game = LuckyDrawGameModel.fromJson(jsonDecode(value));
         }
       });
-      windowSpinTheme = widget.windowSpinTheme;
+      windowSpinSetting = widget.windowSpinSetting;
     });
   }
 
@@ -156,8 +158,8 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
                   margin: EdgeInsets.symmetric(horizontal: min(MediaQuery.of(context).size.width*0.3, 720)),
                   tag: 'setwindowspintheme',
                   child: PopUpSpinTheme(
-                    windowSpinTheme: windowSpinTheme, 
-                    handlerSaveWindowSpinTheme: widget.handlerSaveWindowSpinTheme
+                    windowSpinSetting: windowSpinSetting, 
+                    handlerSaveWindowSpinSetting: widget.handlerSaveWindowSpinSetting
                   ),
                 ),
                 child: Container(
@@ -167,7 +169,7 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
                     borderRadius: BorderRadius.all(Radius.circular(4))
                   ),
                   child: const Text(
-                    "Spin Theme",
+                    "Spin Setting",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14
@@ -178,7 +180,7 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
               if (last_game != null && last_game!.winners.isNotEmpty) TouchableOpacity(
                 onPress: handlerExport,
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.only(left: 10),
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: const BoxDecoration(
                     color: Color(0xFF374251),
@@ -187,9 +189,10 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
                   child: const Text("Export", style: TextStyle(color: Colors.white),),
                 )
               ),
-              TouchableOpacity(
+              if (!widget.isSpinning) TouchableOpacity(
                 onPress: handlerExit(context),
                 child: Container(
+                  margin: const EdgeInsets.only(left: 10),
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: const BoxDecoration(
                     color: Color(0xFF374251),

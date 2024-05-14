@@ -40,10 +40,12 @@ class _TextSpinnerState extends State<TextSpinner> {
   }
 
   void _updateCounter(Timer timer) {
-    setState(() {
-      _text = strip ? "---" : widget.strings[Random().nextInt(widget.strings.length-1) + 1];
-      strip = !strip;
-    });
+    if (mounted) {
+      setState(() {
+        _text = strip ? "---" : widget.strings[Random().nextInt(widget.strings.length-1) + 1];
+        strip = !strip;
+      });
+    }
   }
 
   @override

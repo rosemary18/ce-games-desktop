@@ -10,6 +10,8 @@ class PickerFile extends StatefulWidget {
   final String path;
   final String title;
   final Function(String path) onChange;
+  final List<String> extensions;
+  final bool disable;
 
   const PickerFile({
     super.key,
@@ -17,7 +19,9 @@ class PickerFile extends StatefulWidget {
     this.padding = const EdgeInsets.all(10),
     this.path = "",
     this.title = "",
-    required this.onChange
+    required this.onChange,
+    this.extensions = const ["txt"],
+    this.disable = false
   });
 
   @override
@@ -37,7 +41,7 @@ class _PickerFileState extends State<PickerFile> {
   }
 
   void handlerSelectFile() async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['txt']);
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: widget.extensions);
     if (result != null) {
       setState(() {
         _path = result.files.first.path!;
@@ -60,6 +64,7 @@ class _PickerFileState extends State<PickerFile> {
           ),
           TouchableOpacity(
             onPress: handlerSelectFile,
+            disable: widget.disable,
             child: Container(
               padding: widget.padding,
               decoration: BoxDecoration(

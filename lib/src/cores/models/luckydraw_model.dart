@@ -174,7 +174,7 @@ class LuckyDrawHistoryModel {
   
 }
 
-class WindowSpinThemeModel {
+class WindowSpinSettingsModel {
 
   Color backgroundColor;
   String backgroundImage;
@@ -194,7 +194,13 @@ class WindowSpinThemeModel {
   double textSize;
   double titleSize;
 
-  WindowSpinThemeModel({
+  bool enabledSpinSound;
+  bool enabledWinSound;
+  String spinSoundPath;
+  String winSoundPath;
+  double volumeSound;
+
+  WindowSpinSettingsModel({
     this.backgroundColor = Colors.white,
     this.slotHeight = 50,
     this.slotWidth = 180,
@@ -207,11 +213,16 @@ class WindowSpinThemeModel {
     this.backgroundImage = "",
     this.prizeImageHeight = 300,
     this.prizeImageWidth = 300,
-    this.prizeImagePositionX = 120
+    this.prizeImagePositionX = 120,
+    this.enabledSpinSound = true,
+    this.enabledWinSound = true,
+    this.spinSoundPath = "",
+    this.winSoundPath = "",
+    this.volumeSound = 50
   });
 
-  factory WindowSpinThemeModel.fromJson(Map<String, dynamic> json) {
-    return WindowSpinThemeModel(
+  factory WindowSpinSettingsModel.fromJson(Map<String, dynamic> json) {
+    return WindowSpinSettingsModel(
       backgroundColor: Color(int.parse(json['backgroundColor'].toString().substring(1), radix: 16) + 0xFF000000),
       slotHeight: json['slotHeight'],
       slotWidth: json['slotWidth'],
@@ -224,7 +235,12 @@ class WindowSpinThemeModel {
       backgroundImage: json['backgroundImage'],
       prizeImageHeight: json['prizeImageHeight'],
       prizeImageWidth: json['prizeImageWidth'],
-      prizeImagePositionX: json['prizeImagePositionX']
+      prizeImagePositionX: json['prizeImagePositionX'],
+      enabledSpinSound: json['enabledSpinSound'],
+      enabledWinSound: json['enabledWinSound'],
+      spinSoundPath: json['spinSoundPath'],
+      winSoundPath: json['winSoundPath'],
+      volumeSound: json['volumeSound']
     );
   }
 
@@ -242,7 +258,12 @@ class WindowSpinThemeModel {
       'backgroundImage': backgroundImage,
       'prizeImageHeight': prizeImageHeight,
       'prizeImageWidth': prizeImageWidth,
-      'prizeImagePositionX': prizeImagePositionX
+      'prizeImagePositionX': prizeImagePositionX,
+      'enabledSpinSound': enabledSpinSound,
+      'enabledWinSound': enabledWinSound,
+      'spinSoundPath': spinSoundPath,
+      'winSoundPath': winSoundPath,
+      'volumeSound': volumeSound
     };
   }
 

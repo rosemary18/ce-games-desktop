@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cegames/src/index.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'widgets/index.dart';
@@ -23,8 +24,9 @@ class LuckyDrawDashboardScreen extends StatefulWidget {
 class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
 
   final storage = const FlutterSecureStorage();
+  AudioPlayer player = AudioPlayer();
   WindowController? windowSpin;
-  WindowSpinThemeModel windowSpinTheme = WindowSpinThemeModel();
+  WindowSpinSettingsModel windowSpinSetting = WindowSpinSettingsModel();
   LuckyDrawGameModel? game;
   PrizeModel? activePrize;
   bool isSpinning = false;
@@ -49,11 +51,11 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
         });
       }
     });
-
-    storage.read(key: "luckydraw_window_spin_theme").then((value) {
+    
+    storage.read(key: "luckydraw_window_spin_settings").then((value) {
       if (value != null) {
         setState(() {
-          windowSpinTheme = WindowSpinThemeModel.fromJson(jsonDecode(value));
+          windowSpinSetting = WindowSpinSettingsModel.fromJson(jsonDecode(value));
         });
       }
     });
@@ -63,6 +65,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
   @override
   void dispose() {
     super.dispose();
+    player.dispose();
     if (windowSpin != null) windowSpin!.close();
   }
 
@@ -94,7 +97,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
       "availableParticipants": availableParticipants,
       "stageWinners": stageWinners,
       "stageSpins": stageSpins,
-      "windowSpinTheme": windowSpinTheme.toJson()
+      "windowSpinSetting": windowSpinSetting.toJson()
     };
     DesktopMultiWindow.invokeMethod(windowSpin!.windowId, "update", jsonEncode(data)).onError((e, s) {
       debugPrint(e.toString());
@@ -105,7 +108,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
   }
 
   Function() handlerSelectPrize(int index) {
-    return () {
+    return () async {
       if (isSpinning || stageSpins.isNotEmpty) {
         showToast(
           'Anda sedang melakukan spin pada hadiah ${activePrize?.prize_name}. Hentikan spin terlebih dahulu untuk berpindah.',
@@ -135,6 +138,16 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
           handlerSendDataToWindowSpin();
         });
       }
+
+      if ((game?.prizes[index].winners.length == game?.prizes[index].total) && windowSpinSetting.enabledWinSound) {
+        await player.play(
+          (windowSpinSetting.winSoundPath.isEmpty) ? AssetSource("audios/win-sound.mp3") : DeviceFileSource(windowSpinSetting.winSoundPath), 
+          volume: windowSpinSetting.volumeSound,
+          mode: PlayerMode.lowLatency
+        );
+        await player.setReleaseMode(ReleaseMode.loop);
+      } else await player.stop();
+
     };
   }
 
@@ -303,22 +316,32 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
     });
   }
 
-  void handlerSpin() {
+  void handlerSpin() async {
     if (availableParticipants.length < slots) handlerShowMessageLessParticipants();
-    else setState(() {
-      isSpinning = true;
-      for (var i = 0; i < slots; i++) {
-        if (stageDefinedWinners.isNotEmpty && stageDefinedWinners[i+activePrize!.winners.length] != null) {
-          stageWinners.add(stageDefinedWinners[i+activePrize!.winners.length]!);
-        } else {
-          int randomIndex = Random().nextInt(availableParticipants.length-1) + 1;
-          ParticipantModel sp = availableParticipants[randomIndex];
-          availableParticipants.removeAt(randomIndex);
-          stageWinners.add(sp);
+    else {
+      setState(() {
+        isSpinning = true;
+        for (var i = 0; i < slots; i++) {
+          if (stageDefinedWinners.isNotEmpty && stageDefinedWinners[i+activePrize!.winners.length] != null) {
+            stageWinners.add(stageDefinedWinners[i+activePrize!.winners.length]!);
+          } else {
+            int randomIndex = Random().nextInt(availableParticipants.length-1) + 1;
+            ParticipantModel sp = availableParticipants[randomIndex];
+            availableParticipants.removeAt(randomIndex);
+            stageWinners.add(sp);
+          }
         }
+        handlerSendDataToWindowSpin();
+      });
+      if (windowSpinSetting.enabledSpinSound) {
+        await player.play(
+          (windowSpinSetting.spinSoundPath.isEmpty) ? AssetSource("audios/spin-sound.mp3") : DeviceFileSource(windowSpinSetting.spinSoundPath), 
+          volume: windowSpinSetting.volumeSound,
+          mode: PlayerMode.lowLatency
+        );
+        await player.setReleaseMode(ReleaseMode.loop);
       }
-      handlerSendDataToWindowSpin();
-    });
+    }
   }
 
   void handlerShowMessageLessParticipants() {
@@ -341,11 +364,12 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
     );
   }
 
-  void handlerStopSpin() {
+  void handlerStopSpin() async {
     setState(() {
       isSpinning = false;
       handlerSendDataToWindowSpin();
     });
+    await player.stop();
   }
 
   void handlerSaveWinners() {
@@ -426,7 +450,15 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
   }
 
   Function() handlerSpinSingle(int slot_idx) {
-    return () {
+    return () async {
+      if (windowSpinSetting.enabledSpinSound && stageSpins.isEmpty) {
+        await player.play(
+          (windowSpinSetting.spinSoundPath.isEmpty) ? AssetSource("audios/spin-sound.mp3") : DeviceFileSource(windowSpinSetting.spinSoundPath), 
+          volume: windowSpinSetting.volumeSound,
+          mode: PlayerMode.lowLatency
+        );
+        await player.setReleaseMode(ReleaseMode.loop);
+      }
       setState(() {
 
         for (var k = 0; k < game!.participants.length; k++) {
@@ -456,7 +488,8 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
   }
 
   Function() handlerStopSingle(int slot_idx) {
-    return () {
+    return () async {
+      if (stageSpins.length == 1) await player.stop();
       setState(() {
         stageSpins.remove(slot_idx.toString());
         handlerSendDataToWindowSpin();
@@ -557,11 +590,34 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
     }
   }
 
-  void handlerSaveWindowSpinTheme(WindowSpinThemeModel? theme) {
+  void handlerSaveWindowSpinSetting(WindowSpinSettingsModel? settings) async {
+    
+    if (settings == null) return;
+
+    await player.stop();
+
+    if (isSpinning && settings.enabledSpinSound) {
+        await player.play(
+          (settings.spinSoundPath.isEmpty) ? AssetSource("audios/spin-sound.mp3") : DeviceFileSource(settings.spinSoundPath), 
+          volume: settings.volumeSound,
+          mode: PlayerMode.lowLatency
+        );
+        await player.setReleaseMode(ReleaseMode.loop);
+    }
+
+    if (activePrize != null && ((activePrize!.winners.length == activePrize!.total) && settings.enabledWinSound)) {
+        await player.play(
+          (settings.winSoundPath.isEmpty) ? AssetSource("audios/win-sound.mp3") : DeviceFileSource(settings.winSoundPath), 
+          volume: settings.volumeSound,
+          mode: PlayerMode.lowLatency
+        );
+        await player.setReleaseMode(ReleaseMode.loop);
+    }
+
     setState(() {
-      windowSpinTheme = theme!;
-      storage.delete(key: "luckydraw_window_spin_theme").then((value) => {
-        storage.write(key: "luckydraw_window_spin_theme", value: jsonEncode(theme.toJson())).then((value) => {
+      windowSpinSetting = settings;
+      storage.delete(key: "luckydraw_window_spin_settings").then((value) => {
+        storage.write(key: "luckydraw_window_spin_settings", value: jsonEncode(settings.toJson())).then((value) => {
           handlerSendDataToWindowSpin()
         })
       });
@@ -925,10 +981,11 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
         child: Column(
           children: [
             LuckyDrawHeader(
+              isSpinning: isSpinning,
               windowSpin: windowSpin, 
-              windowSpinTheme: windowSpinTheme,
+              windowSpinSetting: windowSpinSetting,
               handlerOpenWindowSpin: handlerOpenWindowSpin,
-              handlerSaveWindowSpinTheme: handlerSaveWindowSpinTheme,
+              handlerSaveWindowSpinSetting: handlerSaveWindowSpinSetting,
             ),
             Expanded(
               child: Stack(

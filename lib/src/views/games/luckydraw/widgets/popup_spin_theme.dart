@@ -1,16 +1,18 @@
+import 'dart:math';
+
 import 'package:cegames/src/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class PopUpSpinTheme extends StatefulWidget { 
 
-  final WindowSpinThemeModel? windowSpinTheme;
-  final Function(WindowSpinThemeModel?)? handlerSaveWindowSpinTheme;
+  final WindowSpinSettingsModel? windowSpinSetting;
+  final Function(WindowSpinSettingsModel?)? handlerSaveWindowSpinSetting;
 
   const PopUpSpinTheme({
     super.key, 
-    required this.windowSpinTheme,
-    required this.handlerSaveWindowSpinTheme
+    required this.windowSpinSetting,
+    required this.handlerSaveWindowSpinSetting
   });
 
   @override
@@ -19,7 +21,7 @@ class PopUpSpinTheme extends StatefulWidget {
 
 class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
 
-  final WindowSpinThemeModel _windowSpinTheme = WindowSpinThemeModel();
+  final WindowSpinSettingsModel _windowSpinSetting = WindowSpinSettingsModel();
   final storage = const FlutterSecureStorage();
 
   final titleSizeController = TextEditingController();
@@ -30,6 +32,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
   final slotWidthController = TextEditingController();
   final slotSpacingController = TextEditingController();
   final textSizeController = TextEditingController();
+  final volumeSoundController = TextEditingController();
 
   @override
   void initState() {
@@ -45,27 +48,34 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
 
   void handlerlerAssignToTemp() {
     setState(() {
-      _windowSpinTheme.backgroundColor = widget.windowSpinTheme!.backgroundColor;
-      _windowSpinTheme.backgroundImage = widget.windowSpinTheme!.backgroundImage;
-      _windowSpinTheme.prizeImageHeight = widget.windowSpinTheme!.prizeImageHeight;
-      _windowSpinTheme.prizeImageWidth = widget.windowSpinTheme!.prizeImageWidth;
-      _windowSpinTheme.prizeImagePositionX = widget.windowSpinTheme!.prizeImagePositionX;
-      _windowSpinTheme.slotHeight = widget.windowSpinTheme!.slotHeight;
-      _windowSpinTheme.slotWidth = widget.windowSpinTheme!.slotWidth;
-      _windowSpinTheme.slotSpacing = widget.windowSpinTheme!.slotSpacing;
-      _windowSpinTheme.textColor = widget.windowSpinTheme!.textColor;
-      _windowSpinTheme.textSize = widget.windowSpinTheme!.textSize;
-      _windowSpinTheme.withTitle = widget.windowSpinTheme!.withTitle;
-      _windowSpinTheme.titleColor = widget.windowSpinTheme!.titleColor;
+      _windowSpinSetting.backgroundColor = widget.windowSpinSetting!.backgroundColor;
+      _windowSpinSetting.backgroundImage = widget.windowSpinSetting!.backgroundImage;
+      _windowSpinSetting.prizeImageHeight = widget.windowSpinSetting!.prizeImageHeight;
+      _windowSpinSetting.prizeImageWidth = widget.windowSpinSetting!.prizeImageWidth;
+      _windowSpinSetting.prizeImagePositionX = widget.windowSpinSetting!.prizeImagePositionX;
+      _windowSpinSetting.slotHeight = widget.windowSpinSetting!.slotHeight;
+      _windowSpinSetting.slotWidth = widget.windowSpinSetting!.slotWidth;
+      _windowSpinSetting.slotSpacing = widget.windowSpinSetting!.slotSpacing;
+      _windowSpinSetting.textColor = widget.windowSpinSetting!.textColor;
+      _windowSpinSetting.textSize = widget.windowSpinSetting!.textSize;
+      _windowSpinSetting.withTitle = widget.windowSpinSetting!.withTitle;
+      _windowSpinSetting.titleColor = widget.windowSpinSetting!.titleColor;
+      _windowSpinSetting.titleSize = widget.windowSpinSetting!.titleSize;
+      _windowSpinSetting.volumeSound = widget.windowSpinSetting!.volumeSound;
+      _windowSpinSetting.spinSoundPath = widget.windowSpinSetting!.spinSoundPath;
+      _windowSpinSetting.winSoundPath = widget.windowSpinSetting!.winSoundPath;
+      _windowSpinSetting.enabledSpinSound = widget.windowSpinSetting!.enabledSpinSound;
+      _windowSpinSetting.enabledWinSound = widget.windowSpinSetting!.enabledWinSound;
 
-      titleSizeController.text = _windowSpinTheme.titleSize.toString();
-      prizeImageHeightController.text = _windowSpinTheme.prizeImageHeight.toString();
-      prizeImageWidthController.text = _windowSpinTheme.prizeImageWidth.toString();
-      prizeImagePositionXController.text = _windowSpinTheme.prizeImagePositionX.toString();
-      slotHeightController.text = _windowSpinTheme.slotHeight.toString();
-      slotWidthController.text = _windowSpinTheme.slotWidth.toString();
-      slotSpacingController.text = _windowSpinTheme.slotSpacing.toString();
-      textSizeController.text = _windowSpinTheme.textSize.toString();
+      titleSizeController.text = _windowSpinSetting.titleSize.toString();
+      prizeImageHeightController.text = _windowSpinSetting.prizeImageHeight.toString();
+      prizeImageWidthController.text = _windowSpinSetting.prizeImageWidth.toString();
+      prizeImagePositionXController.text = _windowSpinSetting.prizeImagePositionX.toString();
+      slotHeightController.text = _windowSpinSetting.slotHeight.toString();
+      slotWidthController.text = _windowSpinSetting.slotWidth.toString();
+      slotSpacingController.text = _windowSpinSetting.slotSpacing.toString();
+      textSizeController.text = _windowSpinSetting.textSize.toString();
+      volumeSoundController.text = _windowSpinSetting.volumeSound.toString();
     });
   }
 
@@ -88,6 +98,86 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Suara", 
+                          style: TextStyle(
+                            color: Colors.white, 
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: PickerFile(
+                                disable: !_windowSpinSetting.enabledSpinSound,
+                                title: "Ubah Suara Spin",
+                                extensions: const ["mp3", "wav", "ogg"],
+                                path: _windowSpinSetting.spinSoundPath,
+                                onChange: (path) => setState(() => _windowSpinSetting.spinSoundPath = path),
+                                margin: const EdgeInsets.only(top: 4, bottom: 4, right: 4),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.only(top: 4, bottom: 4, left: 4),
+                              child: Switch(
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                value: _windowSpinSetting.enabledSpinSound,
+                                onChanged: (value) => setState(() => _windowSpinSetting.enabledSpinSound = value),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: PickerFile(
+                                disable: !_windowSpinSetting.enabledWinSound,
+                                title: "Ubah Suara Kemenangan",
+                                extensions: const ["mp3", "wav", "ogg"],
+                                path: _windowSpinSetting.winSoundPath,
+                                onChange: (path) => setState(() => _windowSpinSetting.winSoundPath = path),
+                                margin: const EdgeInsets.only(top: 4, bottom: 4, right: 4),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.only(top: 4, bottom: 4, left: 4),
+                              child: Switch(
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                value: _windowSpinSetting.enabledWinSound,
+                                onChanged: (value) => setState(() => _windowSpinSetting.enabledWinSound = value),
+                              ),
+                            )
+                          ],
+                        ),
+                        Input(
+                          label: "Volume",
+                          controller: volumeSoundController,
+                          margin: const EdgeInsets.only(top: 8),
+                          width: 200,
+                          onChanged: (value) => setState(() {
+                            _windowSpinSetting.volumeSound = min(double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.volumeSound, 100);
+                            volumeSoundController.text = min(double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.volumeSound, 100).toString();
+                          }),
+                        ),
+                      ],
+                    )
+                  ),
+
+                  const Divider(
+                    color: Colors.white,
+                    thickness: 0.5,
+                  ),
+
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: Row(
@@ -104,13 +194,13 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                                 style: TextStyle(
                                   color: Colors.white, 
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w700
+                                  fontWeight: FontWeight.bold
                                 )
                               ),
-                              if (_windowSpinTheme.withTitle) PickerColor(
+                              if (_windowSpinSetting.withTitle) PickerColor(
                                 margin: const EdgeInsets.only(top: 8),
-                                value: _windowSpinTheme.titleColor, 
-                                onSubmit: (color) => setState(() => _windowSpinTheme.titleColor = color)
+                                value: _windowSpinSetting.titleColor, 
+                                onSubmit: (color) => setState(() => _windowSpinSetting.titleColor = color)
                               ),
                               Input(
                                 label: "Ukuran Huruf",
@@ -118,7 +208,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                                 margin: const EdgeInsets.only(top: 8),
                                 width: 200,
                                 onChanged: (value) => setState(() {
-                                  _windowSpinTheme.titleSize = double.tryParse(value) != null ? double.parse(value) : _windowSpinTheme.titleSize;
+                                  _windowSpinSetting.titleSize = double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.titleSize;
                                 }),
                               ),
                             ],
@@ -126,8 +216,8 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                         ),
                         Switch(
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          value: _windowSpinTheme.withTitle,
-                          onChanged: (value) => setState(() => _windowSpinTheme.withTitle = value),
+                          value: _windowSpinSetting.withTitle,
+                          onChanged: (value) => setState(() => _windowSpinSetting.withTitle = value),
                         )
                       ],
                     ),
@@ -149,13 +239,13 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           style: TextStyle(
                             color: Colors.white, 
                             fontSize: 14,
-                            fontWeight: FontWeight.w700
+                            fontWeight: FontWeight.bold
                           )
                         ),
                         PickerColor(
                           margin: const EdgeInsets.symmetric(vertical: 8),
-                          value: _windowSpinTheme.backgroundColor, 
-                          onSubmit: (color) => setState(() => _windowSpinTheme.backgroundColor = color)
+                          value: _windowSpinSetting.backgroundColor, 
+                          onSubmit: (color) => setState(() => _windowSpinSetting.backgroundColor = color)
                         ),
                         const Text(
                           "Pilih Gambar: ", 
@@ -166,8 +256,8 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                         ),
                         PickerImage(
                           margin: const EdgeInsets.only(top: 8),
-                          path: _windowSpinTheme.backgroundImage,
-                          onChange: (image) => setState(() => _windowSpinTheme.backgroundImage = image)
+                          path: _windowSpinSetting.backgroundImage,
+                          onChange: (image) => setState(() => _windowSpinSetting.backgroundImage = image)
                         ),
                       ],
                     ),
@@ -189,7 +279,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           style: TextStyle(
                             color: Colors.white, 
                             fontSize: 14,
-                            fontWeight: FontWeight.w700
+                            fontWeight: FontWeight.bold
                           )
                         ),
                         Input(
@@ -198,7 +288,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           margin: const EdgeInsets.only(top: 8),
                           width: 200,
                           onChanged: (value) => setState(() {
-                             _windowSpinTheme.prizeImageHeight = double.tryParse(value) != null ? double.parse(value) : _windowSpinTheme.prizeImageHeight;
+                             _windowSpinSetting.prizeImageHeight = double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.prizeImageHeight;
                           }),
                         ),
                         Input(
@@ -207,7 +297,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           margin: const EdgeInsets.only(top: 8),
                           width: 200,
                           onChanged: (value) => setState(() {
-                            _windowSpinTheme.prizeImageWidth = double.tryParse(value) != null ? double.parse(value) : _windowSpinTheme.prizeImageWidth;
+                            _windowSpinSetting.prizeImageWidth = double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.prizeImageWidth;
                           }),
                         ),
                         Input(
@@ -216,7 +306,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           margin: const EdgeInsets.only(top: 8),
                           width: 200,
                           onChanged: (value) => setState(() {
-                            _windowSpinTheme.prizeImagePositionX = double.tryParse(value) != null ? double.parse(value) : _windowSpinTheme.prizeImagePositionX;
+                            _windowSpinSetting.prizeImagePositionX = double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.prizeImagePositionX;
                           }),
                         )
                       ],
@@ -239,7 +329,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           style: TextStyle(
                             color: Colors.white, 
                             fontSize: 14,
-                            fontWeight: FontWeight.w700
+                            fontWeight: FontWeight.bold
                           )
                         ),
                         Container(
@@ -256,8 +346,8 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                               ),
                               PickerColor(
                                 margin: const EdgeInsets.only(top: 2),
-                                value: _windowSpinTheme.textColor, 
-                                onSubmit: (color) => setState(() => _windowSpinTheme.textColor = color)
+                                value: _windowSpinSetting.textColor, 
+                                onSubmit: (color) => setState(() => _windowSpinSetting.textColor = color)
                               )
                             ],
                           ),
@@ -268,7 +358,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           margin: const EdgeInsets.only(top: 8),
                           width: 200,
                           onChanged: (value) => setState(() {
-                            _windowSpinTheme.textSize = double.tryParse(value) != null ? double.parse(value) : _windowSpinTheme.textSize;
+                            _windowSpinSetting.textSize = double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.textSize;
                           }),
                         ),
                         Input(
@@ -277,7 +367,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           margin: const EdgeInsets.only(top: 8),
                           width: 200,
                           onChanged: (value) => setState(() {
-                             _windowSpinTheme.slotHeight = double.tryParse(value) != null ? double.parse(value) : _windowSpinTheme.slotHeight;
+                             _windowSpinSetting.slotHeight = double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.slotHeight;
                           }),
                         ),
                         Input(
@@ -286,7 +376,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           margin: const EdgeInsets.only(top: 8),
                           width: 200,
                           onChanged: (value) => setState(() {
-                            _windowSpinTheme.slotWidth = double.tryParse(value) != null ? double.parse(value) : _windowSpinTheme.slotWidth;
+                            _windowSpinSetting.slotWidth = double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.slotWidth;
                           }),
                         ),
                         Input(
@@ -295,7 +385,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           margin: const EdgeInsets.only(top: 8),
                           width: 200,
                           onChanged: (value) => setState(() {
-                            _windowSpinTheme.slotSpacing = double.tryParse(value) != null ? double.parse(value) : _windowSpinTheme.slotSpacing;
+                            _windowSpinSetting.slotSpacing = double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.slotSpacing;
                           }),
                         ),
                       ],
@@ -314,7 +404,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
             child: TouchableOpacity(
               onPress: () {
                 Navigator.of(context).pop();
-                widget.handlerSaveWindowSpinTheme!(_windowSpinTheme);
+                widget.handlerSaveWindowSpinSetting!(_windowSpinSetting);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),

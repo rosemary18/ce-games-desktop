@@ -22,7 +22,7 @@ class LuckydrawSpinScreen extends StatefulWidget {
 
 class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
 
-  WindowSpinThemeModel windowSpinTheme = WindowSpinThemeModel();
+  WindowSpinSettingsModel windowSpinSetting = WindowSpinSettingsModel();
   PrizeModel? activePrize;
   bool isSpinning = false;
   int slots = 0;
@@ -39,7 +39,7 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
   Future<dynamic> handlerMethodCallBack(MethodCall c, int wid) async {
     dynamic data = jsonDecode(c.arguments.toString());
     setState(() {
-      windowSpinTheme = ((data["windowSpinTheme"] != null) ? WindowSpinThemeModel.fromJson(data["windowSpinTheme"]) : null)!;
+      windowSpinSetting = ((data["windowSpinSetting"] != null) ? WindowSpinSettingsModel.fromJson(data["windowSpinSetting"]) : null)!;
       activePrize = (data["activePrize"] != null) ? PrizeModel.fromJson(data["activePrize"]) : null ;
       isSpinning = data["isSpinning"] as bool;
       slots = data["slots"] as int;
@@ -54,7 +54,7 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
       height: double.infinity,
       width: double.infinity,
       child: Image.file(
-        File(windowSpinTheme.backgroundImage),
+        File(windowSpinSetting.backgroundImage),
         fit: BoxFit.cover,
       ),
     );
@@ -63,9 +63,9 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
 
   Widget _buildSlot(BuildContext ctx, int index) {
     return Container(
-      margin: EdgeInsets.all(windowSpinTheme.slotSpacing),
-      height: windowSpinTheme.slotHeight,
-      width: windowSpinTheme.slotWidth,
+      margin: EdgeInsets.all(windowSpinSetting.slotSpacing),
+      height: windowSpinSetting.slotHeight,
+      width: windowSpinSetting.slotWidth,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: const BorderRadius.all(Radius.circular(100)),
@@ -80,7 +80,10 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
       ),
       child: Center(
         child: (isSpinning || (stageSpins[index.toString()] != null && stageSpins[index.toString()]!["spin"] == true)) ? TextSpinner(
-          strings: availableParticipants.map((e) => e.name).toList(),
+          strings: [
+            ...stageWinners.map((e) => e.name), 
+            ...availableParticipants.map((e) => e.name)
+          ].toList(),
           spin: true,
           style: const TextStyle(
             color: Colors.black,
@@ -89,8 +92,8 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
         ) : Text(
           (stageWinners.isNotEmpty && ((index+1) <= stageWinners.length)) ? stageWinners[index].name : "Slot ${index+1}",
           style: TextStyle(
-            color: windowSpinTheme.textColor,
-            fontSize: windowSpinTheme.textSize
+            color: windowSpinSetting.textColor,
+            fontSize: windowSpinSetting.textSize
           )
         ),
       )
@@ -106,24 +109,24 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
           if (activePrize != null && activePrize!.image.isNotEmpty) Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              margin: EdgeInsets.only(left: windowSpinTheme.prizeImagePositionX),
-              height: windowSpinTheme.prizeImageHeight,
-              width: windowSpinTheme.prizeImageWidth,
+              margin: EdgeInsets.only(left: windowSpinSetting.prizeImagePositionX),
+              height: windowSpinSetting.prizeImageHeight,
+              width: windowSpinSetting.prizeImageWidth,
               child: Image.file(
                 File(activePrize!.image),
                 fit: BoxFit.contain,
               ),
             ),
           ),
-          if (windowSpinTheme.withTitle) Align(
+          if (windowSpinSetting.withTitle) Align(
             alignment: Alignment.topCenter,
             child: Container(
               margin: EdgeInsets.only(top: (MediaQuery.of(ctx).size.height * .12)),
               child: Text(
                 (activePrize != null) ? activePrize!.prize_name : "",
                 style: TextStyle(
-                  color: windowSpinTheme.titleColor,
-                  fontSize: windowSpinTheme.titleSize,
+                  color: windowSpinSetting.titleColor,
+                  fontSize: windowSpinSetting.titleSize,
                   fontWeight: FontWeight.bold
                 )
               ),
@@ -174,10 +177,10 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
         body: Container(
           height: double.infinity,
           width: double.infinity,
-          color: windowSpinTheme.backgroundColor,
+          color: windowSpinSetting.backgroundColor,
           child: Stack(
             children: [
-              if (windowSpinTheme.backgroundImage.isNotEmpty) _buildBackground(context),
+              if (windowSpinSetting.backgroundImage.isNotEmpty) _buildBackground(context),
               if (activePrize != null) _buildContent(context),
             ],
           ),
