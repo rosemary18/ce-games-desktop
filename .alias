@@ -1,0 +1,5 @@
+alias fbuild='flutter pub get && flutter pub run build_runner build'
+alias frun='flutter run'
+alias fprun='flutter pub run'
+alias ftest='flutter test'
+alias fadd='flutter pub add'
