@@ -11,13 +11,10 @@ Future<void> startUp(bool isMainWindow) async {
   if (isMainWindow) {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
-      size: Size(700, 700),
-      minimumSize: Size(700, 700),
+      size: Size(700, 800),
+      minimumSize: Size(700, 800),
       center: true,
-      // backgroundColor: Colors.transparent,
-      // skipTaskbar: false,
       titleBarStyle: TitleBarStyle.normal,
-      // windowButtonVisibility: false,
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
