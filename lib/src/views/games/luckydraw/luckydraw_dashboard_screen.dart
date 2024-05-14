@@ -70,20 +70,19 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
   }
 
   void handlerOpenWindowSpin() async {
-
-    final window = await DesktopMultiWindow.createWindow();
-    setState(() {
-      windowSpin = window;
-    });
-
-    Timer(const Duration(milliseconds: 1000), () {
-      windowSpin
-        ?..setFrame(const Offset(0, 0) & const Size(800, 800))
-        ..center()
-        ..setTitle('Lucky Draw - Spin')
-        ..resizable(true)
-        ..show();
-      handlerSendDataToWindowSpin();
+    await DesktopMultiWindow.createWindow(jsonEncode({})).then((window) {
+      Timer(const Duration(milliseconds: 1000), () {
+        setState(() {
+          if (Platform.isMacOS) window.resizable(true);
+          window
+            ..setFrame(const Offset(0, 0) & const Size(800, 800))
+            ..center()
+            ..setTitle('Lucky Draw - Spin')
+            ..show();
+          windowSpin = window;
+          handlerSendDataToWindowSpin();
+        });
+      });
     });
   }
 

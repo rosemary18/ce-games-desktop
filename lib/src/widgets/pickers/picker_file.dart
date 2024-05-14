@@ -75,9 +75,10 @@ class _PickerFileState extends State<PickerFile> {
                 borderRadius: const BorderRadius.all(Radius.circular(4)),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(_fileName, style: const TextStyle(color: Colors.white, fontSize: 12),),
+                  Expanded(
+                    child: Text(_fileName, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontSize: 12))
+                  ),
                   const Icon(IconlyBroken.arrow_down_2, color: Colors.white, size: 16,),
                 ],
               ),

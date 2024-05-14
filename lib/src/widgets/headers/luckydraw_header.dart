@@ -140,6 +140,7 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
               if (widget.windowSpin == null) TouchableOpacity(
                 onPress: widget.handlerOpenWindowSpin,
                 child: Container(
+                  margin: const EdgeInsets.only(left: 10),
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: const BoxDecoration(
                     color: Color(0xFF374251),
@@ -163,6 +164,7 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
                   ),
                 ),
                 child: Container(
+                  margin: const EdgeInsets.only(left: 10),
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: const BoxDecoration(
                     color: Color(0xFF374251),
