@@ -15,6 +15,7 @@ Future<void> startUp(bool isMainWindow) async {
       minimumSize: Size(700, 800),
       center: true,
       titleBarStyle: TitleBarStyle.normal,
+      fullScreen: true
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();

@@ -41,7 +41,6 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
   void initState() {
 
     super.initState();
-    handlerOpenWindowSpin();
 
     storage.read(key: "luckydraw_last_game").then((value) {
       if (value != null) {
@@ -134,7 +133,8 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
           stageWinners = [];
           stageSpins = {};
           stageDefinedWinners = game!.prizes[index].defined_winners; 
-          handlerSendDataToWindowSpin();
+          if (windowSpin == null) handlerOpenWindowSpin();
+          else handlerSendDataToWindowSpin();
         });
       }
 
