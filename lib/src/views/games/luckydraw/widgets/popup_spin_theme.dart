@@ -33,6 +33,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
   final slotSpacingController = TextEditingController();
   final textSizeController = TextEditingController();
   final volumeSoundController = TextEditingController();
+  final List<PickerListItemModel> boxFitItems = List.generate(BoxFit.values.length, (index) => PickerListItemModel(value: BoxFit.values[index].name, data: BoxFit.values[index]));
 
   @override
   void initState() {
@@ -255,10 +256,29 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           )
                         ),
                         PickerImage(
-                          margin: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.only(top: 8, bottom: 12),
                           path: _windowSpinSetting.backgroundImage,
                           onChange: (image) => setState(() => _windowSpinSetting.backgroundImage = image)
                         ),
+                        const Text(
+                          "Penyesuaian Gambar: ", 
+                          style: TextStyle(
+                            color: Colors.white, 
+                            fontSize: 10,
+                          )
+                        ),
+                        PickerList(
+                          width: 140,
+                          value: boxFitItems[boxFitItems.indexWhere((e) => e.data == _windowSpinSetting.backgroundImageFit)],
+                          list: boxFitItems,
+                          margin: const EdgeInsets.only(top: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          onChange: (item, index) {
+                            setState(() {
+                              _windowSpinSetting.backgroundImageFit = item.data;
+                            });
+                          },
+                        )
                       ],
                     ),
                   ),

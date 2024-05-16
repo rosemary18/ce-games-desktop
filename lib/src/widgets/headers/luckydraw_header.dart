@@ -42,7 +42,7 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
     
     super.initState();
     setState(() {
-      storage.read(key: "luckydraw_last_game").then((value) {
+      readStorage(key: "luckydraw_last_game", cb: (value) {
         if (value != null) {
           last_game = LuckyDrawGameModel.fromJson(jsonDecode(value));
         }
@@ -55,7 +55,7 @@ class _LuckyDrawHeaderState extends State<LuckyDrawHeader> {
   void didUpdateWidget(covariant LuckyDrawHeader oldWidget) {
     super.didUpdateWidget(oldWidget);
     setState(() {
-      storage.read(key: "luckydraw_last_game").then((value) {
+      readStorage(key: "luckydraw_last_game", cb: (value) {
         if (value != null) {
           last_game = LuckyDrawGameModel.fromJson(jsonDecode(value));
         }

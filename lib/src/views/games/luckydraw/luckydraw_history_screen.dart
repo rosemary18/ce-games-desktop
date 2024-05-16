@@ -24,7 +24,7 @@ class _LuckyDrawHistoryScreenState extends State<LuckyDrawHistoryScreen> {
   void initState() {
     
     super.initState();
-    storage.read(key: "luckydraw_history").then((value) {
+    readStorage(key: "luckydraw_history", cb: (value) {
       if (value != null) {
         setState(() {
           history = LuckyDrawHistoryModel.fromJson(jsonDecode(value));
@@ -61,9 +61,7 @@ class _LuckyDrawHistoryScreenState extends State<LuckyDrawHistoryScreen> {
       if (confirmed != null && confirmed) {
         setState(() {
           history?.history.removeWhere((element) => element.id == game.id);
-          storage.delete(key: "luckydraw_history").then((value) => {
-            storage.write(key: "luckydraw_history", value: jsonEncode(history?.toJson()))
-          });
+          writeStorage(key: "luckydraw_history", value: jsonEncode(history?.toJson()));
         });
       }
     };
@@ -73,19 +71,17 @@ class _LuckyDrawHistoryScreenState extends State<LuckyDrawHistoryScreen> {
     return () async {
 
       history?.history.removeWhere((element) => element.id == game.id);
-      await storage.delete(key: "luckydraw_history").then((value) => {
-        storage.read(key: "luckydraw_last_game").then((value) {
+      await storage.delete(key: "luckydraw_history").then((value) {
+        readStorage(key: "luckydraw_last_game", cb: (value) {
           if (value != null) {
             LuckyDrawGameModel last_game = LuckyDrawGameModel.fromJson(jsonDecode(value));
             history?.history.insert(0, last_game);
-            storage.write(key: "luckydraw_history", value: jsonEncode(history?.toJson()));
+            writeStorage(key: "luckydraw_history", value: jsonEncode(history?.toJson()));
           }
-        }),
+        });
       });
       
-      await storage.delete(key: "luckydraw_last_game").then((value) => {
-        storage.write(key: "luckydraw_last_game", value: jsonEncode(game.toJson()))
-      });
+      await writeStorage(key: "luckydraw_last_game", value: jsonEncode(game.toJson()));
 
       ctx.pushNamed(appRoutes.games.luckydraw.dashboard.name);
 

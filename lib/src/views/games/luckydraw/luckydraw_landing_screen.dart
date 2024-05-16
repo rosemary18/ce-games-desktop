@@ -23,7 +23,7 @@ class _LuckyDrawLandingScreenState extends State<LuckyDrawLandingScreen> {
   void initState() {
     super.initState();
 
-    storage.read(key: "luckydraw_last_game").then((value) {
+    readStorage(key: "luckydraw_last_game", cb: (value) {
       if (value != null) {
         setState(() {
           last_game = LuckyDrawGameModel.fromJson(jsonDecode(value));
@@ -31,7 +31,7 @@ class _LuckyDrawLandingScreenState extends State<LuckyDrawLandingScreen> {
       }
     });
 
-    storage.read(key: "luckydraw_history").then((value) {
+    readStorage(key: "luckydraw_history", cb: (value) {
       if (value != null) {
         setState(() {
           history = LuckyDrawHistoryModel.fromJson(jsonDecode(value));
@@ -45,7 +45,7 @@ class _LuckyDrawLandingScreenState extends State<LuckyDrawLandingScreen> {
 
   void _onFocusChange() {
     setState(() {
-      storage.read(key: "luckydraw_history").then((value) {
+      readStorage(key: "luckydraw_history", cb: (value) {
         if (value != null) {
           setState(() {
             history = LuckyDrawHistoryModel.fromJson(jsonDecode(value));

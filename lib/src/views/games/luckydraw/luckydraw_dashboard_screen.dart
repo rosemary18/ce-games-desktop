@@ -42,7 +42,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
 
     super.initState();
 
-    storage.read(key: "luckydraw_last_game").then((value) {
+    readStorage(key: "luckydraw_last_game", cb: (value) {
       if (value != null) {
         setState(() {
           game = LuckyDrawGameModel.fromJson(jsonDecode(value));
@@ -51,7 +51,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
       }
     });
     
-    storage.read(key: "luckydraw_window_spin_settings").then((value) {
+    readStorage(key: "luckydraw_window_spin_settings", cb: (value) {
       if (value != null) {
         setState(() {
           windowSpinSetting = WindowSpinSettingsModel.fromJson(jsonDecode(value));
@@ -178,9 +178,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
       if (confirmed != null && confirmed) {
         setState(() {
           game?.prizes.removeAt(index);
-          storage.delete(key: "luckydraw_last_game").then((value) => {
-            storage.write(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()))
-          });
+          writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));
         });
       }
     };
@@ -215,9 +213,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
       if (confirmed != null && confirmed) {
         setState(() {
           game?.participants.removeAt(index);
-          storage.delete(key: "luckydraw_last_game").then((value) => {
-            storage.write(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()))
-          });
+          writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));
           sortParticipants();
         });
       }
@@ -236,9 +232,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
           defined_winners: []
         )
       );
-      storage.delete(key: "luckydraw_last_game").then((value) => {        
-        storage.write(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()))
-      });
+      writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));
     });
   }
 
@@ -252,9 +246,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
           defined_prize: false
         )
       );
-      storage.delete(key: "luckydraw_last_game").then((value) => {        
-        storage.write(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()))
-      });
+      writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));
       sortParticipants();
     });
   }
@@ -399,9 +391,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
 
           activePrize = game!.prizes[i];
 
-          storage.delete(key: "luckydraw_last_game").then((value) => {
-            storage.write(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()))
-          });
+          writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));
           break;
         }
       }
@@ -428,9 +418,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
               }
             }
           }
-          storage.delete(key: "luckydraw_last_game").then((value) => {
-            storage.write(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()))
-          });
+          writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));
           break;
         }
       }
@@ -476,9 +464,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
           "spin": true,
         };
 
-        storage.delete(key: "luckydraw_last_game").then((value) => {
-          storage.write(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()))
-        });
+        writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));
 
         sortParticipants();
         handlerSendDataToWindowSpin();
@@ -540,9 +526,8 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
         }
       }
 
-      storage.delete(key: "luckydraw_last_game").then((value) => {
-        storage.write(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()))
-      });
+      writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));
+
       sortParticipants();
     });
   }
@@ -554,9 +539,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
           if (game!.participants[k].id == id) {
             game!.participants[k].defined_prize = false;
             game!.participants[k].available = true;
-            storage.delete(key: "luckydraw_last_game").then((value) => {
-              storage.write(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()))
-            });
+            writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));
             break;
           }
         }
@@ -567,26 +550,35 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
 
   void handlerUpdateImagePrize(String image) async {
 
-    final dirPath = await getApplicationDocumentsDirectory();
-    final destPath = '${dirPath.path}/${image.split('/').last}';
-
-    try {
-      final sourceFile = File(image);
-      final dest = File(destPath);
-      await sourceFile.copy(dest.path).then((value) {
+    if (image.isEmpty) {
         setState(() {
-          activePrize?.image = dest.path;
+          activePrize?.image = "";
           int index = game!.prizes.indexOf(activePrize!);
           game!.prizes[index] = activePrize!;
-          storage.delete(key: "luckydraw_last_game").then((value) => {
-            storage.write(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()))
-          });
+          writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));        
           handlerSendDataToWindowSpin();
         });
-      });
-    } catch (e) {
-      debugPrint('Gagal menyalin file: $e');
+    } else {
+      final dirPath = await getApplicationDocumentsDirectory();
+      final destPath = '${dirPath.path}/${image.split('/').last}';
+
+      try {
+        final sourceFile = File(image);
+        final dest = File(destPath);
+        await sourceFile.copy(dest.path).then((value) {
+          setState(() {
+            activePrize?.image = dest.path;
+            int index = game!.prizes.indexOf(activePrize!);
+            game!.prizes[index] = activePrize!;
+            writeStorage(key: "luckydraw_last_game", value: jsonEncode(game?.toJson()));
+            handlerSendDataToWindowSpin();
+          });
+        });
+      } catch (e) {
+        debugPrint('Gagal menyalin file: $e');
+      }
     }
+
   }
 
   void handlerSaveWindowSpinSetting(WindowSpinSettingsModel? settings) async {
@@ -615,10 +607,8 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
 
     setState(() {
       windowSpinSetting = settings;
-      storage.delete(key: "luckydraw_window_spin_settings").then((value) => {
-        storage.write(key: "luckydraw_window_spin_settings", value: jsonEncode(settings.toJson())).then((value) => {
-          handlerSendDataToWindowSpin()
-        })
+      writeStorage(key: "luckydraw_window_spin_settings", value: jsonEncode(settings.toJson())).then((value) => {
+        handlerSendDataToWindowSpin()
       });
       handlerSendDataToWindowSpin();
     });

@@ -63,7 +63,7 @@ class _LuckyDrawFormScreenState extends State<LuckyDrawFormScreen> {
       LuckyDrawGameModel? last_game;
       LuckyDrawHistoryModel history = LuckyDrawHistoryModel(history: []);
 
-      await storage.read(key: "luckydraw_history").then((value) {
+      await readStorage(key: "luckydraw_history", cb: (value) {
         if (value != null) {
           setState(() {
             history = LuckyDrawHistoryModel.fromJson(jsonDecode(value));
@@ -71,7 +71,7 @@ class _LuckyDrawFormScreenState extends State<LuckyDrawFormScreen> {
         }
       });
 
-      storage.read(key: "luckydraw_last_game").then((value) {
+      readStorage(key: "luckydraw_last_game", cb: (value) {
         if (value != null) {
           setState(() {
             last_game = LuckyDrawGameModel.fromJson(jsonDecode(value));
@@ -114,15 +114,12 @@ class _LuckyDrawFormScreenState extends State<LuckyDrawFormScreen> {
 
       String encoded = jsonEncode(newGame.toJson());
 
-      await storage.delete(key: 'luckydraw_game');
-      await storage.delete(key: 'luckydraw_last_game');
-      await storage.write(key: 'luckydraw_game', value: encoded);
-      await storage.write(key: 'luckydraw_last_game', value: encoded);
+      await writeStorage(key: 'luckydraw_game', value: encoded);
+      await writeStorage(key: 'luckydraw_last_game', value: encoded);
       
       if (last_game != null) {
         history.history.add(last_game!);
-        await storage.delete(key: 'luckydraw_history');
-        await storage.write(key: 'luckydraw_history', value: jsonEncode(history.toJson()));
+        await writeStorage(key: 'luckydraw_history', value: jsonEncode(history.toJson()));
       }
 
       ctx.pushNamed(appRoutes.games.luckydraw.dashboard.name);

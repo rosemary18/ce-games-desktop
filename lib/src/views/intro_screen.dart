@@ -33,7 +33,7 @@ class _IntroScreenState extends State<IntroScreen> {
   void initState() {
     super.initState();
 
-    storage.read(key: "activation").then((value) {
+    readStorage(key: "activation", cb: (value) {
       if (value != null) {
         setState(() {
           activation = ActivationModel.fromJson(jsonDecode(value));
@@ -60,7 +60,7 @@ class _IntroScreenState extends State<IntroScreen> {
       });
     });
 
-    storage.write(key: "password", value: "admin");
+    writeStorage(key: "password", value: "admin");
   }
 
   String handlerChiperToken(String token) {
@@ -132,11 +132,8 @@ class _IntroScreenState extends State<IntroScreen> {
                 lastCheck: DateTime.now(),
               );
 
-              storage.delete(key: "password");
-              storage.write(key: "password", value: "admin");
-
-              storage.delete(key: "activation");
-              storage.write(key: "activation", value: jsonEncode(activation!.toJson()));
+              writeStorage(key: "password", value: "admin");
+              writeStorage(key: "activation", value: jsonEncode(activation!.toJson()));
 
               showToast(
                 'Aktivasi berhasil!',
@@ -213,8 +210,7 @@ class _IntroScreenState extends State<IntroScreen> {
           if (valid) {
             setState(() {
               activation!.lastCheck = DateTime.now();
-              storage.delete(key: "activation");
-              storage.write(key: "activation", value: jsonEncode(activation!.toJson()));
+              writeStorage(key: "activation", value: jsonEncode(activation!.toJson()));
             });
           } else {
             setState(() {

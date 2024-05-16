@@ -178,6 +178,7 @@ class WindowSpinSettingsModel {
 
   Color backgroundColor;
   String backgroundImage;
+  BoxFit backgroundImageFit;
 
   double prizeImageHeight;
   double prizeImageWidth;
@@ -211,6 +212,7 @@ class WindowSpinSettingsModel {
     this.textSize = 20,
     this.titleSize = 48,
     this.backgroundImage = "",
+    this.backgroundImageFit = BoxFit.contain,
     this.prizeImageHeight = 300,
     this.prizeImageWidth = 300,
     this.prizeImagePositionX = 120,
@@ -233,6 +235,7 @@ class WindowSpinSettingsModel {
       textColor: Color(int.parse(json['textColor'].toString().substring(1), radix: 16) + 0xFF000000),
       textSize: json['textSize'],
       backgroundImage: json['backgroundImage'],
+      backgroundImageFit: _stringToBoxFit(json['backgroundImageFit']),
       prizeImageHeight: json['prizeImageHeight'],
       prizeImageWidth: json['prizeImageWidth'],
       prizeImagePositionX: json['prizeImagePositionX'],
@@ -256,6 +259,7 @@ class WindowSpinSettingsModel {
       'textColor': '#${textColor.value.toRadixString(16)}',
       'textSize': textSize,
       'backgroundImage': backgroundImage,
+      'backgroundImageFit': _boxFitToString(backgroundImageFit),
       'prizeImageHeight': prizeImageHeight,
       'prizeImageWidth': prizeImageWidth,
       'prizeImagePositionX': prizeImagePositionX,
@@ -265,6 +269,46 @@ class WindowSpinSettingsModel {
       'winSoundPath': winSoundPath,
       'volumeSound': volumeSound
     };
+  }
+
+  static BoxFit _stringToBoxFit(String value) {
+    switch (value) {
+      case 'fill':
+        return BoxFit.fill;
+      case 'contain':
+        return BoxFit.contain;
+      case 'cover':
+        return BoxFit.cover;
+      case 'fitWidth':
+        return BoxFit.fitWidth;
+      case 'fitHeight':
+        return BoxFit.fitHeight;
+      case 'none':
+        return BoxFit.none;
+      case 'scaleDown':
+        return BoxFit.scaleDown;
+      default:
+        return BoxFit.fill;
+    }
+  }
+
+  static String _boxFitToString(BoxFit boxFit) {
+    switch (boxFit) {
+      case BoxFit.fill:
+        return 'fill';
+      case BoxFit.contain:
+        return 'contain';
+      case BoxFit.cover:
+        return 'cover';
+      case BoxFit.fitWidth:
+        return 'fitWidth';
+      case BoxFit.fitHeight:
+        return 'fitHeight';
+      case BoxFit.none:
+        return 'none';
+      case BoxFit.scaleDown:
+        return 'scaleDown';
+    }
   }
 
 }

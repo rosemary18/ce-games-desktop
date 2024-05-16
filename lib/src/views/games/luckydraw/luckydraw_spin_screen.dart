@@ -55,7 +55,7 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
       width: double.infinity,
       child: Image.file(
         File(windowSpinSetting.backgroundImage),
-        fit: BoxFit.cover,
+        fit: windowSpinSetting.backgroundImageFit,
       ),
     );
   }

@@ -158,8 +158,7 @@ class _PopUpChangePassContentState extends State<PopUpChangePassContent> {
             placeholder: "Confirm Password",
             onSubmitted: (value) async {
               if (!((password.isEmpty || passwordConfirm.isEmpty) || (password != passwordConfirm))) {
-                await storage.delete(key: "password");
-                await storage.write(key: "password", value: password);
+                await writeStorage(key: "password", value: password);
                 Navigator.pop(context);
               }
             },
@@ -171,8 +170,7 @@ class _PopUpChangePassContentState extends State<PopUpChangePassContent> {
             child: TouchableOpacity(
               onPress: () async {
                 if (!((password.isEmpty || passwordConfirm.isEmpty) || (password != passwordConfirm))) {
-                  await storage.delete(key: "password");
-                  await storage.write(key: "password", value: password);
+                  await writeStorage(key: "password", value: password);
                   Navigator.pop(context);
                 }
               },
