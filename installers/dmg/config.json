@@ -1,0 +1,9 @@
+{
+    "title": "Central Event Games",
+    "icon": "./app_icon.icns",
+    "background-color": "#FFFFFF",
+    "contents": [
+        { "x": 448, "y": 344, "type": "link", "path": "/Applications" },
+        { "x": 192, "y": 344, "type": "file", "path": "/Users/seninselasa/Desktop/cegames/build/macos/Build/Products/Release/Central Event Games.app" }
+    ]
+}
