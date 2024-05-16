@@ -92,8 +92,10 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
             color: Colors.white,
             thickness: 0.5,
           ),
-          SizedBox(
+          Container(
             height: MediaQuery.of(context).size.height * 0.5,
+            clipBehavior: Clip.hardEdge,
+            decoration: const BoxDecoration(),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -269,7 +271,11 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                         ),
                         PickerList(
                           width: 140,
-                          value: boxFitItems[boxFitItems.indexWhere((e) => e.data == _windowSpinSetting.backgroundImageFit)],
+                          value: boxFitItems[
+                            boxFitItems.indexWhere((e) => e.data == _windowSpinSetting.backgroundImageFit) != -1 ? 
+                            boxFitItems.indexWhere((e) => e.data == _windowSpinSetting.backgroundImageFit) 
+                            : 0
+                          ],
                           list: boxFitItems,
                           margin: const EdgeInsets.only(top: 8),
                           padding: const EdgeInsets.symmetric(horizontal: 12),
