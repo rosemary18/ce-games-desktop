@@ -557,8 +557,10 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
           handlerSendDataToWindowSpin();
         });
     } else {
+
+      String t = Platform.isWindows ? "\\" : "/";
       final dirPath = await getApplicationDocumentsDirectory();
-      final destPath = '${dirPath.path}/${image.split('/').last}';
+      final destPath = '${dirPath.path}$t${image.split(t).last}';
 
       try {
         final sourceFile = File(image);
@@ -870,24 +872,39 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
               )
             ),
           ),
-          (game != null && game!.winners.isNotEmpty) ? ListView.builder(
-            itemCount: game!.winners.length,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Container(
-                margin: const EdgeInsets.only(bottom: 6, left: 12, right: 12),
-                child: Text(
-                  "${index+1}. ${game!.winners[index].participant_name} - (${game!.winners[index].prize_name})",
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14
-                  )
-                )
-              );
-            },
-          ) : Container(
+          (game != null && game!.winners.isNotEmpty) ? FutureBuilder(
+              future: Future.delayed(const Duration(milliseconds: 1000)),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox(
+                    height: 80,
+                    width: double.infinity,
+                    child: Center(
+                      child: CircularProgressIndicator(strokeWidth: 1),
+                    )
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: game!.winners.length,
+                    scrollDirection: Axis.vertical,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 6, left: 12, right: 12),
+                        child: Text(
+                          "${index+1}. ${game!.winners[index].participant_name} - (${game!.winners[index].prize_name})",
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14
+                          )
+                        )
+                      );
+                    },
+                  );
+                }
+              },
+            ) : Container(
             margin: const EdgeInsets.symmetric(horizontal: 12),
             child: const Text("-",
               style: TextStyle(
@@ -1004,13 +1021,19 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
                                   fontWeight: FontWeight.bold
                                 ),
                               ),
-                            ),
+                            ),   
                             Expanded(
                               child: Stack(
                                 children: [
                                   Container(
                                     margin: const EdgeInsets.only(bottom: 68),
-                                    child: ListView.builder(
+                                    child: game == null ? const SizedBox(
+                                      height: 80,
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: CircularProgressIndicator(strokeWidth: 1),
+                                      )
+                                    ) : ListView.builder(
                                       itemCount: game?.prizes.length,
                                       scrollDirection: Axis.vertical,
                                       shrinkWrap: true,
