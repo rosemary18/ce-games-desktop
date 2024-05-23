@@ -37,8 +37,10 @@ class _IntroScreenState extends State<IntroScreen> {
       if (value != null) {
         setState(() {
           activation = ActivationModel.fromJson(jsonDecode(value));
-          Duration diff = DateTime.now().difference(activation!.lastCheck);
-          if (diff.inDays >= 7) handlerActivation();
+          Timer(const Duration(milliseconds: 500), () {
+            Duration diff = DateTime.now().difference(activation!.lastCheck);
+            if (diff.inDays >= 7) handlerActivation();
+          });
         });
       }
     });
@@ -87,22 +89,26 @@ class _IntroScreenState extends State<IntroScreen> {
 
     String link = "";
 
-    Map<String, dynamic> payload = JwtDecoder.decode(handlerChiperToken(token));
-    if (payload.containsKey("exp") && payload.containsKey("link")) {
-      DateTime exp = DateFormat("dd/MM/yyyy").parse(payload["exp"].toString());
-      if (exp.isBefore(DateTime.now())) {
-        showToast(
-          'Token expired',
-          position: ToastPosition.top,
-          backgroundColor: const Color.fromARGB(145, 244, 67, 54),
-          textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        );
-        return;
-      } else {
-        link = payload["link"].toString();
+    if (activation != null) {
+      link = activation!.link;
+    } else {
+      Map<String, dynamic> payload = JwtDecoder.decode(handlerChiperToken(token));
+      if (payload.containsKey("exp") && payload.containsKey("link")) {
+        DateTime exp = DateFormat("dd/MM/yyyy").parse(payload["exp"].toString());
+        if (exp.isBefore(DateTime.now())) {
+          showToast(
+            'Token expired',
+            position: ToastPosition.top,
+            backgroundColor: const Color.fromARGB(145, 244, 67, 54),
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+          );
+          return;
+        } else {
+          link = payload["link"].toString();
+        }
       }
     }
 
@@ -160,7 +166,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
         } else {
           showToast(
-            'Kode aktivasi salah',
+            'Tidak ditemukan kode aktivasi pada token yang ada!',
             position: ToastPosition.top,
             backgroundColor: const Color.fromARGB(145, 244, 67, 54),
             textStyle: const TextStyle(
