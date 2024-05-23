@@ -1,4 +1,5 @@
 {
     "cmake.sourceDirectory": "/Users/seninselasa/Desktop/cegames/linux",
-    "dart.enableSdkFormatter": false
+    "dart.enableSdkFormatter": false,
+    "cmake.configureOnOpen": false
 }

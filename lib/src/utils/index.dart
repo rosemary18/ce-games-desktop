@@ -16,14 +16,13 @@ readStorage({required String key, required Function(String?) cb}) async {
 }
 
 writeStorage({required String key, required String value}) async {
-  storage.containsKey(key: key).then((exist) {
-    if (exist) {
-      storage.delete(key: key).then((_) {
-        return storage.write(key: key, value: value);
-      });
-    } 
-    return storage.write(key: key, value: value);
-  });
 
-  return false;
+  bool exist = await storage.containsKey(key: key);
+  
+  if (exist) {
+    await storage.delete(key: key);
+    return storage.write(key: key, value: value);
+  } 
+
+  return storage.write(key: key, value: value);
 }
