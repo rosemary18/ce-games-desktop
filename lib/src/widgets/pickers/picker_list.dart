@@ -104,6 +104,7 @@ class _PickerListState extends State<PickerList> {
           int index = widget.list.indexOf(_value!);
           widget.onChange!(value!, index);
         },
+        elevation: 12,
       ),
     );
   }
