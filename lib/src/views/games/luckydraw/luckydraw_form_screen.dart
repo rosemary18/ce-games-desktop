@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -122,7 +123,9 @@ class _LuckyDrawFormScreenState extends State<LuckyDrawFormScreen> {
         await writeStorage(key: 'luckydraw_history', value: jsonEncode(history.toJson()));
       }
 
-      ctx.pushNamed(appRoutes.games.luckydraw.dashboard.name);
+      Timer(const Duration(milliseconds: 300), () {
+        ctx.pushNamed(appRoutes.games.luckydraw.dashboard.name);
+      });
 
     };
   }

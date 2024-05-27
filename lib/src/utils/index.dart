@@ -6,12 +6,12 @@ export 'generator.dart';
 const storage = FlutterSecureStorage();
 
 readStorage({required String key, required Function(String?) cb}) async {
-  storage.containsKey(key: key).then((value) {
+  await storage.containsKey(key: key).then((value) async {
     if (value) {
-      storage.read(key: key).then((value) {
+      return await storage.read(key: key).then((value) {
         cb(value);
       });
-    } else cb(null);
+    } else return await cb(null);
   });
 }
 
@@ -21,8 +21,8 @@ writeStorage({required String key, required String value}) async {
   
   if (exist) {
     await storage.delete(key: key);
-    return storage.write(key: key, value: value);
+    return await storage.write(key: key, value: value);
   } 
 
-  return storage.write(key: key, value: value);
+  return await storage.write(key: key, value: value);
 }

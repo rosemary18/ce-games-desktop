@@ -102,7 +102,7 @@ class _LuckyDrawHistoryScreenState extends State<LuckyDrawHistoryScreen> {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 56, vertical: 24),
-                child: history == null ? const Center(child: CircularProgressIndicator()) : 
+                child: history == null ? const Center(child: CircularProgressIndicator(strokeWidth: 1)) : 
                 Column(
                   children: [
                     Padding(

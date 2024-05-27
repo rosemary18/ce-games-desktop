@@ -59,7 +59,10 @@ class PrizeModel {
       total: json['total'],
       image: json['image'],
       winners: List<ParticipantModel>.from(json['winners'].map((participant) => ParticipantModel.fromJson(participant))),
-      defined_winners: List<ParticipantModel?>.from(json['defined_winners'].map((participant) => ParticipantModel.fromJson(participant))),
+      defined_winners: List<ParticipantModel?>.from(json['defined_winners'].map((participant) {
+        if (participant != null) return ParticipantModel.fromJson(participant);
+        else return null;
+      })),
     );
   }
   
