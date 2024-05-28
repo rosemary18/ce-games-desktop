@@ -85,13 +85,15 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
             ...availableParticipants.map((e) => e.name)
           ].toList(),
           spin: true,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 14
+          style:  TextStyle(
+            fontFamily: "Raleway-SemiBold",
+            color: windowSpinSetting.textColor,
+            fontSize: windowSpinSetting.textSize
           ),
         ) : Text(
           (stageWinners.isNotEmpty && ((index+1) <= stageWinners.length)) ? stageWinners[index].name : "Slot ${index+1}",
           style: TextStyle(
+            fontFamily: "Raleway-SemiBold",
             color: windowSpinSetting.textColor,
             fontSize: windowSpinSetting.textSize
           )
@@ -121,10 +123,11 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
           if (windowSpinSetting.withTitle) Align(
             alignment: Alignment.topCenter,
             child: Container(
-              margin: EdgeInsets.only(top: (MediaQuery.of(ctx).size.height * .12)),
+              margin: EdgeInsets.only(top: windowSpinSetting.titleVerticalPosition),
               child: Text(
                 (activePrize != null) ? activePrize!.prize_name : "",
                 style: TextStyle(
+                  fontFamily: "Raleway-Bold",
                   color: windowSpinSetting.titleColor,
                   fontSize: windowSpinSetting.titleSize,
                   fontWeight: FontWeight.bold
@@ -156,6 +159,7 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
                 child: Text(
                   activePrize!.winners[index].name,
                   style: const TextStyle(
+                    fontFamily: "Raleway-SemiBold",
                     color: Color.fromARGB(255, 22, 18, 48),
                     fontSize: 40,
                   )

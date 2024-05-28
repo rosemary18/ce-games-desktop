@@ -193,6 +193,7 @@ class WindowSpinSettingsModel {
 
   bool withTitle;
   Color titleColor;
+  double titleVerticalPosition;
 
   Color textColor;
   double textSize;
@@ -214,6 +215,7 @@ class WindowSpinSettingsModel {
     this.textColor = Colors.black,
     this.textSize = 20,
     this.titleSize = 48,
+    this.titleVerticalPosition = 150,
     this.backgroundImage = "",
     this.backgroundImageFit = BoxFit.contain,
     this.prizeImageHeight = 300,
@@ -234,6 +236,7 @@ class WindowSpinSettingsModel {
       slotSpacing: json['slotSpacing'],
       withTitle: json['withTitle'],
       titleSize: json['titleSize'],
+      titleVerticalPosition: json['titleVerticalPosition'] ?? "150",
       titleColor: Color(int.parse(json['titleColor'].toString().substring(1), radix: 16) + 0xFF000000),
       textColor: Color(int.parse(json['textColor'].toString().substring(1), radix: 16) + 0xFF000000),
       textSize: json['textSize'],
@@ -258,6 +261,7 @@ class WindowSpinSettingsModel {
       'slotSpacing': slotSpacing,
       'withTitle': withTitle,
       'titleSize': titleSize,
+      'titleVerticalPosition': titleVerticalPosition,
       'titleColor': '#${titleColor.value.toRadixString(16)}',
       'textColor': '#${textColor.value.toRadixString(16)}',
       'textSize': textSize,
