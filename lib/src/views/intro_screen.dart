@@ -39,7 +39,7 @@ class _IntroScreenState extends State<IntroScreen> {
           activation = ActivationModel.fromJson(jsonDecode(value));
           Timer(const Duration(milliseconds: 500), () {
             Duration diff = DateTime.now().difference(activation!.lastCheck);
-            if (diff.inDays >= 7) handlerActivation();
+            if (diff.inDays >= 7) handlerReactivation();
           });
         });
       }
@@ -112,7 +112,7 @@ class _IntroScreenState extends State<IntroScreen> {
       }
     }
 
-    http.get(Uri.parse(link)).then((response) {
+    await http.get(Uri.parse(link)).then((response) {
       if (response.statusCode == 200) {
         List<dynamic> data = [];
         bool valid = false;
@@ -153,6 +153,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
             });
           } else {
+
             showToast(
               'Kode aktivasi salah',
               position: ToastPosition.top,

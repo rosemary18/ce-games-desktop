@@ -52,6 +52,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
     setState(() {
       _windowSpinSetting.backgroundColor = widget.windowSpinSetting!.backgroundColor;
       _windowSpinSetting.backgroundImage = widget.windowSpinSetting!.backgroundImage;
+      _windowSpinSetting.backgroundImageFit = widget.windowSpinSetting!.backgroundImageFit;
       _windowSpinSetting.prizeImageHeight = widget.windowSpinSetting!.prizeImageHeight;
       _windowSpinSetting.prizeImageWidth = widget.windowSpinSetting!.prizeImageWidth;
       _windowSpinSetting.prizeImagePositionX = widget.windowSpinSetting!.prizeImagePositionX;

@@ -236,7 +236,7 @@ class WindowSpinSettingsModel {
       slotSpacing: json['slotSpacing'],
       withTitle: json['withTitle'],
       titleSize: json['titleSize'],
-      titleVerticalPosition: json['titleVerticalPosition'] ?? "150",
+      titleVerticalPosition: json['titleVerticalPosition'] ?? 150,
       titleColor: Color(int.parse(json['titleColor'].toString().substring(1), radix: 16) + 0xFF000000),
       textColor: Color(int.parse(json['textColor'].toString().substring(1), radix: 16) + 0xFF000000),
       textSize: json['textSize'],

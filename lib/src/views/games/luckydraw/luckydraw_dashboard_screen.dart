@@ -605,6 +605,22 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
         await player.setReleaseMode(ReleaseMode.loop);
     }
 
+    if (settings.backgroundImage.isNotEmpty) {
+        String t = Platform.isWindows ? "\\" : "/";
+        final dirPath = await getApplicationDocumentsDirectory();
+        final destPath = '${dirPath.path}$t${settings.backgroundImage.split(t).last}';
+
+        try {
+          final sourceFile = File(settings.backgroundImage);
+          final dest = File(destPath);
+          await sourceFile.copy(dest.path).then((value) {
+            settings.backgroundImage = dest.path;
+          });
+        } catch (e) {
+          settings.backgroundImage = "";
+        }
+    }
+
     setState(() {
       windowSpinSetting = settings;
       writeStorage(key: "luckydraw_window_spin_settings", value: jsonEncode(settings.toJson())).then((value) => {
