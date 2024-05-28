@@ -25,6 +25,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
   final storage = const FlutterSecureStorage();
 
   final titleSizeController = TextEditingController();
+  final titleVerticalPositionController = TextEditingController();
   final prizeImageHeightController = TextEditingController();
   final prizeImageWidthController = TextEditingController();
   final prizeImagePositionXController = TextEditingController();
@@ -62,6 +63,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
       _windowSpinSetting.withTitle = widget.windowSpinSetting!.withTitle;
       _windowSpinSetting.titleColor = widget.windowSpinSetting!.titleColor;
       _windowSpinSetting.titleSize = widget.windowSpinSetting!.titleSize;
+      _windowSpinSetting.titleVerticalPosition = widget.windowSpinSetting!.titleVerticalPosition;
       _windowSpinSetting.volumeSound = widget.windowSpinSetting!.volumeSound;
       _windowSpinSetting.spinSoundPath = widget.windowSpinSetting!.spinSoundPath;
       _windowSpinSetting.winSoundPath = widget.windowSpinSetting!.winSoundPath;
@@ -69,6 +71,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
       _windowSpinSetting.enabledWinSound = widget.windowSpinSetting!.enabledWinSound;
 
       titleSizeController.text = _windowSpinSetting.titleSize.toString();
+      titleVerticalPositionController.text = _windowSpinSetting.titleVerticalPosition.toString();
       prizeImageHeightController.text = _windowSpinSetting.prizeImageHeight.toString();
       prizeImageWidthController.text = _windowSpinSetting.prizeImageWidth.toString();
       prizeImagePositionXController.text = _windowSpinSetting.prizeImagePositionX.toString();
@@ -212,6 +215,15 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                                 width: 200,
                                 onChanged: (value) => setState(() {
                                   _windowSpinSetting.titleSize = double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.titleSize;
+                                }),
+                              ),
+                              Input(
+                                label: "Jarak Dari Atas",
+                                controller: titleVerticalPositionController,
+                                margin: const EdgeInsets.only(top: 8),
+                                width: 200,
+                                onChanged: (value) => setState(() {
+                                  _windowSpinSetting.titleVerticalPosition = double.tryParse(value) != null ? double.parse(value) : _windowSpinSetting.titleVerticalPosition;
                                 }),
                               ),
                             ],
