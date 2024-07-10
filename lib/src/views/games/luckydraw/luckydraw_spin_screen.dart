@@ -67,7 +67,7 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
       height: windowSpinSetting.slotHeight,
       width: windowSpinSetting.slotWidth,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: windowSpinSetting.slotColor,
         borderRadius: const BorderRadius.all(Radius.circular(100)),
         boxShadow: [
           BoxShadow(

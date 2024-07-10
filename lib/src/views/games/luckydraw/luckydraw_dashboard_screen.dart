@@ -450,6 +450,19 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
           if (game!.participants[k].id == stageWinners[slot_idx].id) {
             game!.participants[k].defined_prize = false;
             game!.participants[k].available = false;
+            if (activePrize!.defined_winners.isNotEmpty) {
+              for (var i = 0; i < activePrize!.defined_winners.length; i++) {
+                if (activePrize!.defined_winners[i]?.id == game!.participants[k].id) {
+                  activePrize!.defined_winners[i] = null;
+                  stageDefinedWinners = activePrize!.defined_winners;
+                  for (var i = 0; i < game!.prizes.length; i++) {
+                    if (game!.prizes[i].id == activePrize!.id) {
+                      game!.prizes[i] = activePrize!;
+                    }
+                  }
+                }
+              }
+            }
           }
         }
 
@@ -964,7 +977,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
               ),
             ),
           ),
-          if (!(stageDefinedWinners.isNotEmpty && stageDefinedWinners[index+activePrize!.winners.length] != null) && stageWinners.isNotEmpty && ((index+1) <= stageWinners.length) && ((!isSpinning && stageSpins[index.toString()] == null) || (stageSpins[index.toString()] != null && stageSpins[index.toString()]!["spin"] == false))) Positioned(
+          if (/* !(stageDefinedWinners.isNotEmpty && stageDefinedWinners[index+activePrize!.winners.length] != null) && */ stageWinners.isNotEmpty && ((index+1) <= stageWinners.length) && ((!isSpinning && stageSpins[index.toString()] == null) || (stageSpins[index.toString()] != null && stageSpins[index.toString()]!["spin"] == false))) Positioned(
             right: 0,
             child: IconButton(
               onPressed: handlerSpinSingle(index), 
@@ -1176,7 +1189,7 @@ class _LuckyDrawDashboardScreenState extends State<LuckyDrawDashboardScreen> {
                                                       borderRadius: BorderRadius.all(Radius.circular(8))
                                                     ),
                                                     child: const Text(
-                                                      "Atur Pemenang",
+                                                      "Shuffle Set",
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 14

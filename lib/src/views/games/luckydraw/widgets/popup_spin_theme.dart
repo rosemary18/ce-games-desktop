@@ -59,6 +59,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
       _windowSpinSetting.slotHeight = widget.windowSpinSetting!.slotHeight;
       _windowSpinSetting.slotWidth = widget.windowSpinSetting!.slotWidth;
       _windowSpinSetting.slotSpacing = widget.windowSpinSetting!.slotSpacing;
+      _windowSpinSetting.slotColor = widget.windowSpinSetting!.slotColor;
       _windowSpinSetting.textColor = widget.windowSpinSetting!.textColor;
       _windowSpinSetting.textSize = widget.windowSpinSetting!.textSize;
       _windowSpinSetting.withTitle = widget.windowSpinSetting!.withTitle;
@@ -384,9 +385,21 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                                 )
                               ),
                               PickerColor(
-                                margin: const EdgeInsets.only(top: 2),
+                                margin: const EdgeInsets.only(top: 2, bottom: 12),
                                 value: _windowSpinSetting.textColor, 
                                 onSubmit: (color) => setState(() => _windowSpinSetting.textColor = color)
+                              ),
+                              const Text(
+                                "Warna Slot ", 
+                                style: TextStyle(
+                                  color: Colors.white, 
+                                  fontSize: 10,
+                                )
+                              ),
+                              PickerColor(
+                                margin: const EdgeInsets.only(top: 2),
+                                value: _windowSpinSetting.slotColor, 
+                                onSubmit: (color) => setState(() => _windowSpinSetting.slotColor = color)
                               )
                             ],
                           ),

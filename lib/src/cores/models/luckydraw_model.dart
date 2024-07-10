@@ -190,6 +190,7 @@ class WindowSpinSettingsModel {
   double slotHeight;
   double slotWidth;
   double slotSpacing;
+  Color slotColor;
 
   bool withTitle;
   Color titleColor;
@@ -210,6 +211,7 @@ class WindowSpinSettingsModel {
     this.slotHeight = 50,
     this.slotWidth = 180,
     this.slotSpacing = 8,
+    this.slotColor = Colors.white,
     this.withTitle = true,
     this.titleColor = Colors.black,
     this.textColor = Colors.black,
@@ -234,6 +236,7 @@ class WindowSpinSettingsModel {
       slotHeight: json['slotHeight'],
       slotWidth: json['slotWidth'],
       slotSpacing: json['slotSpacing'],
+      slotColor: json['slotColor'] == null ? Colors.white : Color(int.parse(json['slotColor'].toString().substring(1), radix: 16) + 0xFF000000),
       withTitle: json['withTitle'],
       titleSize: json['titleSize'],
       titleVerticalPosition: json['titleVerticalPosition'] ?? 150,
@@ -259,6 +262,8 @@ class WindowSpinSettingsModel {
       'slotHeight': slotHeight,
       'slotWidth': slotWidth,
       'slotSpacing': slotSpacing,
+      // ignore: unnecessary_null_comparison
+      'slotColor': slotColor == null ? '#${Colors.white.value.toRadixString(16)}' : '#${slotColor.value.toRadixString(16)}',
       'withTitle': withTitle,
       'titleSize': titleSize,
       'titleVerticalPosition': titleVerticalPosition,
