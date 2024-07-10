@@ -8,7 +8,7 @@ Or
 
 1. `sudo npm i -g appdmg`
 2. `Masuk ke folder installers -> dmg`
-3. `appdmg ./config.json ./Central-Event-Games-v1.0.0-Installer.dmg`
+3. `appdmg ./config.json ./CentralEventGames-v1.0.0-Installer.dmg`
 
 --------------------------------------------------------------------------
 
