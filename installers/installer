@@ -15,5 +15,5 @@ Or
 Langkah - langkah pembuatan file installer Windows
 
 1. `flutter clean && flutter pub get && flutter build windows --release`
-2. Download dan intall Inno
+2. Download dan install Inno
 3. Jalankan Create Script Wizard

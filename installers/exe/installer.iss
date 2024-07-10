@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Central Event Games"
-#define MyAppVersion "1.0.0.4"
+#define MyAppVersion "1.0.0.5"
 #define MyAppPublisher "Central Event Games, Org."
 #define MyAppURL "https://www.central-events.com"
 #define MyAppExeName "CentralEventGames.exe"
@@ -23,7 +23,7 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputDir=D:\ce-games-desktop\installers\exe
-OutputBaseFilename=CentralEventGames-v1.0.0.4-Installer
+OutputBaseFilename=CentralEventGames-v1.0.0.5-Installer
 SetupIconFile=D:\ce-games-desktop\installers\exe\app_icon.ico
 Compression=lzma
 SolidCompression=yes
