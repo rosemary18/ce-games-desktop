@@ -71,6 +71,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
       _windowSpinSetting.winSoundPath = widget.windowSpinSetting!.winSoundPath;
       _windowSpinSetting.enabledSpinSound = widget.windowSpinSetting!.enabledSpinSound;
       _windowSpinSetting.enabledWinSound = widget.windowSpinSetting!.enabledWinSound;
+      _windowSpinSetting.enableLabelSlot = widget.windowSpinSetting!.enableLabelSlot;
 
       titleSizeController.text = _windowSpinSetting.titleSize.toString();
       titleVerticalPositionController.text = _windowSpinSetting.titleVerticalPosition.toString();
@@ -82,6 +83,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
       slotSpacingController.text = _windowSpinSetting.slotSpacing.toString();
       textSizeController.text = _windowSpinSetting.textSize.toString();
       volumeSoundController.text = _windowSpinSetting.volumeSound.toString();
+
     });
   }
 
@@ -377,6 +379,29 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 2),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      "Label slot", 
+                                      style: TextStyle(
+                                        color: Colors.white, 
+                                        fontSize: 18,
+                                      )
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 4, bottom: 4, left: 4),
+                                      child: Switch(
+                                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                        value: _windowSpinSetting.enableLabelSlot,
+                                        onChanged: (value) => setState(() => _windowSpinSetting.enableLabelSlot = value),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                               const Text(
                                 "Warna Huruf ", 
                                 style: TextStyle(

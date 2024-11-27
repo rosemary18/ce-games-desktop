@@ -91,7 +91,7 @@ class _LuckydrawSpinScreenState extends State<LuckydrawSpinScreen> {
             fontSize: windowSpinSetting.textSize
           ),
         ) : Text(
-          (stageWinners.isNotEmpty && ((index+1) <= stageWinners.length)) ? stageWinners[index].name : "Slot ${index+1}",
+          (stageWinners.isNotEmpty && ((index+1) <= stageWinners.length)) ? stageWinners[index].name : windowSpinSetting.enableLabelSlot ? "Slot ${index+1}" : "",
           style: TextStyle(
             fontFamily: "Raleway-SemiBold",
             color: windowSpinSetting.textColor,
