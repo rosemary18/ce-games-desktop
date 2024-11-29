@@ -34,6 +34,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
   final slotSpacingController = TextEditingController();
   final textSizeController = TextEditingController();
   final volumeSoundController = TextEditingController();
+  final labelSlotController = TextEditingController();
   final List<PickerListItemModel> boxFitItems = List.generate(BoxFit.values.length, (index) => PickerListItemModel(value: BoxFit.values[index].name, data: BoxFit.values[index]));
 
   @override
@@ -71,7 +72,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
       _windowSpinSetting.winSoundPath = widget.windowSpinSetting!.winSoundPath;
       _windowSpinSetting.enabledSpinSound = widget.windowSpinSetting!.enabledSpinSound;
       _windowSpinSetting.enabledWinSound = widget.windowSpinSetting!.enabledWinSound;
-      _windowSpinSetting.enableLabelSlot = widget.windowSpinSetting!.enableLabelSlot;
+      _windowSpinSetting.labelSlot = widget.windowSpinSetting!.labelSlot;
 
       titleSizeController.text = _windowSpinSetting.titleSize.toString();
       titleVerticalPositionController.text = _windowSpinSetting.titleVerticalPosition.toString();
@@ -83,7 +84,7 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
       slotSpacingController.text = _windowSpinSetting.slotSpacing.toString();
       textSizeController.text = _windowSpinSetting.textSize.toString();
       volumeSoundController.text = _windowSpinSetting.volumeSound.toString();
-
+      labelSlotController.text = _windowSpinSetting.labelSlot.toString();
     });
   }
 
@@ -379,28 +380,14 @@ class _PopUpSpinThemeState extends State<PopUpSpinTheme> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 2),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      "Label slot", 
-                                      style: TextStyle(
-                                        color: Colors.white, 
-                                        fontSize: 18,
-                                      )
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(top: 4, bottom: 4, left: 4),
-                                      child: Switch(
-                                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                        value: _windowSpinSetting.enableLabelSlot,
-                                        onChanged: (value) => setState(() => _windowSpinSetting.enableLabelSlot = value),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                              Input(
+                                label: "Label slot",
+                                controller: labelSlotController,
+                                margin: const EdgeInsets.only(top: 8),
+                                width: 200,
+                                onChanged: (value) => setState(() {
+                                  _windowSpinSetting.labelSlot = value;
+                                }),
                               ),
                               const Text(
                                 "Warna Huruf ", 

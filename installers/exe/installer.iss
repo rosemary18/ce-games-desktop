@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Central Event Games"
-#define MyAppVersion "1.0.0.6"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "Central Event Games, Org."
 #define MyAppURL "https://www.central-events.com"
 #define MyAppExeName "CentralEventGames.exe"
@@ -10,7 +10,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{0F727243-435A-495E-974C-8A1D19FBE86D}
+AppId={{0F727243-435A-495E-974C-8A1D19FBE86D}}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -23,7 +23,7 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputDir=D:\ce-games-desktop\installers\exe
-OutputBaseFilename=CentralEventGames-v1.0.0.6-Installer
+OutputBaseFilename=CentralEventGames-v1.0.1-Installer
 SetupIconFile=D:\ce-games-desktop\installers\exe\app_icon.ico
 Compression=lzma
 SolidCompression=yes

@@ -206,7 +206,8 @@ class WindowSpinSettingsModel {
   String winSoundPath;
   double volumeSound;
 
-  bool enableLabelSlot;
+  String labelSlot;
+
 
   WindowSpinSettingsModel({
     this.backgroundColor = Colors.white,
@@ -230,7 +231,7 @@ class WindowSpinSettingsModel {
     this.spinSoundPath = "",
     this.winSoundPath = "",
     this.volumeSound = 50,
-    this.enableLabelSlot = true
+    this.labelSlot = "----"
   });
 
   factory WindowSpinSettingsModel.fromJson(Map<String, dynamic> json) {
@@ -257,7 +258,7 @@ class WindowSpinSettingsModel {
       winSoundPath: json['winSoundPath'],
       volumeSound: json['volumeSound'],
       // ignore: prefer_if_null_operators
-      enableLabelSlot: json['enableLabelSlot'] == null ? true : json['enableLabelSlot']
+      labelSlot: json['labelSlot'] ?? ""
     );
   }
 
@@ -285,7 +286,7 @@ class WindowSpinSettingsModel {
       'spinSoundPath': spinSoundPath,
       'winSoundPath': winSoundPath,
       'volumeSound': volumeSound,
-      'enableLabelSlot': enableLabelSlot
+      'labelSlot': labelSlot
     };
   }
 
